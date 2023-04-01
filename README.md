@@ -7,3 +7,15 @@ This is the capstone project of the Trainee Full-Stack Developer Programme offer
 - Database: SQLite
 
 For more details check [the detailed documentation](/docs/README.md).
+
+Previous `package.json` test commands
+
+#### On Root Level
+```json
+"test": "npm i forever --prefix ./frontend && export NODE_ENV=test-backend && NODE_OPTIONS='--experimental-vm-modules --experimental-specifier-resolution=node' jest --verbose ./backend/test --forceExit"
+```
+
+#### On Frontend
+```json
+"test": "npm i && npm i forever && export NODE_ENV=test && forever start --minUptime 30000 ../backend/index.js && forever start --minUptime 30000 node_modules/@angular/cli/bin/ng serve --port 4000 --configuration=test && sleep 20 && testcafe chrome:headless ./test"
+```
