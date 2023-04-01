@@ -34,7 +34,7 @@ export class TeacherTableComponent implements OnInit {
     this.router.navigate(['editTeacher'], navigationExtras)
   }
 
-  initializeDB() {
+  initializeDB(){
     this.service.initializeDB().subscribe((response) => {
       console.log('DB is Initialized')
     }, (error) => {
@@ -60,12 +60,12 @@ export class TeacherTableComponent implements OnInit {
     })
   }
 
-  search(value: string) {
+  search(value) {
     let foundItems = [];
     if (value.length <= 0) {
       this.getTeacherData();
     } else {
-      this.teacherData.forEach(teacher => {
+      let b = this.teacherData.filter((teacher) => {
         if (teacher[0].name.toLowerCase().indexOf(value) > -1) {
           foundItems.push(teacher)
         }
