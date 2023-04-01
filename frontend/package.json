@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "npm i && npm i forever && export NODE_ENV=test && forever start --minUptime 30000 ../backend/index.js && forever start --minUptime 30000 node_modules/@angular/cli/bin/ng serve --port 4000 --configuration=test && sleep 10 && testcafe chrome:headless $file && forever stopall"
+    "test2" : "ng serve --port 4000 && testcafe opera:headless $file",
+    "test": "npm i && npm i forever && npm i -g @angular/cli && export NODE_ENV=test && forever start --minUptime 30000 ../backend/index.js && ng serve --port 4000 --configuration=test && testcafe chrome:headless $file && forever stopall"
   },
   "private": true,
   "dependencies": {
