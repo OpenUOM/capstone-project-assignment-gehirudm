@@ -67,6 +67,9 @@
             },
             "development": {
               "browserTarget": "frontend-rebuild:build:development"
+            },
+            "test": {
+              "browserTarget": "frontend-rebuild:build:test"
             }
           },
           "defaultConfiguration": "development"
