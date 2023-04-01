@@ -3,11 +3,11 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --port 4000 --configuration=test",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test2" : "ng serve --port 4000 && testcafe opera:headless $file",
-    "test": "npm i && npm i forever && npm i -g @angular/cli && export NODE_ENV=test && forever start --minUptime 30000 ../backend/index.js && ng serve --port 4000 --configuration=test && testcafe chrome:headless $file && forever stopall"
+    "test": "npm i && npm install pm2@latest -g && npm i -g @angular/cli && export NODE_ENV=test && pm2 start ../backend/index.js && pm2 start npm -- start && testcafe chrome:headless $file && pm2 stop all"
   },
   "private": true,
   "dependencies": {
