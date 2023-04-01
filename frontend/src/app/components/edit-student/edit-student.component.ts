@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationExtras } from '@angular/router';
-import {AppServiceService} from '../../app-service.service';
+import { AppServiceService } from '../../app-service.service';
+import { Student } from 'src/app/models/model';
 
 @Component({
   selector: 'app-edit-student',
@@ -9,10 +10,9 @@ import {AppServiceService} from '../../app-service.service';
 })
 export class EditStudentComponent implements OnInit {
 
-  studentData: any;
+  studentData: Student = {} as Student
 
-
-  constructor(private service : AppServiceService, private router: Router) { }
+  constructor(private service: AppServiceService, private router: Router) { }
 
   navigation = this.router.getCurrentNavigation();
 
@@ -20,24 +20,30 @@ export class EditStudentComponent implements OnInit {
     this.getStudentData();
   }
 
-  getStudentData(){
-    let student = {
-      id : this.navigation.extras.state.id
+  getStudentData() {
+    if (this.navigation?.extras.state) {
+      let student = {
+        id: this.navigation.extras.state["id"]
+      }
+      this.service.getOneStudentData(student).subscribe(
+        {
+          next: (response) => { this.studentData = response[0] },
+          error: (error) => console.error(error)
+        }
+      )
     }
-    this.service.getOneStudentData(student).subscribe((response)=>{
-      this.studentData = response[0];
-    },(error)=>{
-      console.log('ERROR - ', error)
-    })
   }
 
-  editStudent(values){
-    values.id = this.navigation.extras.state.id;
-    this.service.editStudent(values).subscribe((response)=>{
-      this.studentData = response[0];
-    },(error)=>{
-      console.log('ERROR - ', error)
-    })
+  editStudent(values: Student) {
+    if (this.navigation?.extras.state) {
+      values.id = this.navigation.extras.state["id"];
+      this.service.editStudent(values).subscribe(
+        {
+          next: (response) => { this.studentData = response[0] },
+          error: (error) => console.error(error)
+        }
+      )
+    }
   }
 
 }

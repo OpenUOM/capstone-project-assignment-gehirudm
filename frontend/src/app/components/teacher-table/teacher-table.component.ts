@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, NavigationExtras } from '@angular/router';
 import { faTrash, faPlus, faPenSquare } from '@fortawesome/free-solid-svg-icons';
 import { AppServiceService } from '../../app-service.service';
+import { Teacher } from 'src/app/models/model';
 @Component({
   selector: 'app-teacher-table',
   templateUrl: './teacher-table.component.html',
@@ -12,8 +13,8 @@ export class TeacherTableComponent implements OnInit {
   faTrash = faTrash;
   faPlus = faPlus;
   faPenSquare = faPenSquare;
-  teacherData: any;
-  selected: any;
+  teacherData: Teacher[] = [];
+  selected: String = 'Teachers';
 
   constructor(private service: AppServiceService, private router: Router) { }
 
@@ -25,7 +26,7 @@ export class TeacherTableComponent implements OnInit {
     this.router.navigate(['addTeacher'])
   }
 
-  editTeacher(id) {
+  editTeacher(id: number) {
     const navigationExtras: NavigationExtras = {
       state: {
         id: id
@@ -34,39 +35,21 @@ export class TeacherTableComponent implements OnInit {
     this.router.navigate(['editTeacher'], navigationExtras)
   }
 
-  initializeDB(){
-    this.service.initializeDB().subscribe((response) => {
-      console.log('DB is Initialized')
-    }, (error) => {
-      console.log('ERROR - ', error)
-    })
-  }
-
   getTeacherData() {
     this.selected = 'Teachers';
-    this.service.getTeacherData().subscribe((response) => {
-      this.teacherData = Object.keys(response).map((key) => [response[key]]);
-    }, (error) => {
-      console.log('ERROR - ', error)
+    this.service.getTeacherData().subscribe({
+      next: (response) => { this.teacherData = response },
+      error: (error) => console.log(error)
     })
   }
 
-  getStudentData() {
-    this.selected = 'Students';
-    this.service.getStudentData().subscribe((response) => {
-      this.teacherData = response;
-    }, (error) => {
-      console.log('ERROR - ', error)
-    })
-  }
-
-  search(value) {
-    let foundItems = [];
+  search(value: string) {
+    let foundItems: Teacher[] = [];
     if (value.length <= 0) {
       this.getTeacherData();
     } else {
-      let b = this.teacherData.filter((teacher) => {
-        if (teacher[0].name.toLowerCase().indexOf(value) > -1) {
+      this.teacherData.filter((teacher) => {
+        if (teacher.name.toLowerCase().indexOf(value) > -1) {
           foundItems.push(teacher)
         }
       });
@@ -74,11 +57,12 @@ export class TeacherTableComponent implements OnInit {
     }
   }
 
-  deleteTeacher(itemid) {
+  deleteTeacher(id: number) {
     const test = {
-      id: itemid
+      id
     }
-    this.service.deleteTeacher(test).subscribe((response) => {
+
+    this.service.deleteTeacher(test).subscribe(() => {
       this.getTeacherData()
     })
   }

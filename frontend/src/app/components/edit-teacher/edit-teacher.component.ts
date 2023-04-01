@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationExtras } from '@angular/router';
-import {AppServiceService} from '../../app-service.service';
+import { AppServiceService } from '../../app-service.service';
+import { Teacher } from 'src/app/models/model';
 
 @Component({
   selector: 'app-edit-teacher',
@@ -13,7 +14,7 @@ export class EditTeacherComponent implements OnInit {
   teacherData: any;
 
 
-  constructor(private service : AppServiceService, private router: Router) { }
+  constructor(private service: AppServiceService, private router: Router) { }
 
   navigation = this.router.getCurrentNavigation();
 
@@ -21,24 +22,30 @@ export class EditTeacherComponent implements OnInit {
     this.getTeacherData();
   }
 
-  getTeacherData(){
-    let teacher = {
-      id : this.navigation.extras.state.id
+  getTeacherData() {
+    if (this.navigation?.extras.state) {
+      let teacher = {
+        id: this.navigation.extras.state["id"]
+      }
+      this.service.getOneTeacherData(teacher).subscribe(
+        {
+          next: (response) => { this.teacherData = response[0] },
+          error: (error) => console.error(error)
+        }
+      )
     }
-    this.service.getOneTeacherData(teacher).subscribe((response)=>{
-      this.teacherData = response[0];
-    },(error)=>{
-      console.log('ERROR - ', error)
-    })
   }
 
-  editTeacher(values){
-    values.id = this.navigation.extras.state.id;
-    this.service.editTeacher(values).subscribe((response)=>{
-      this.teacherData = response[0];
-    },(error)=>{
-      console.log('ERROR - ', error)
-    })
+  editTeacher(values: Teacher) {
+    if (this.navigation?.extras.state) {
+      values.id = this.navigation.extras.state["id"];
+      this.service.editTeacher(values).subscribe(
+        {
+          next: (response) => { this.teacherData = response[0] },
+          error: (error) => console.error(error)
+        }
+      )
+    }
   }
 
 }
