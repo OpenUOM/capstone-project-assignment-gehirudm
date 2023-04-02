@@ -1,4 +1,5 @@
 const dbConnection = require("./sqlite");
+const testBase = require("../backend/test/testBase");
 
 dbConnection
   .getDbConnection()
@@ -172,5 +173,6 @@ module.exports = {
     readStudentInfo,
     readTeacherInfo,
     updateStudent,
-    updateTeacher
+    updateTeacher,
+    dbinitialize
 };
